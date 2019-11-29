@@ -52,7 +52,7 @@ items = pages + issues
 
 rofi_input = '\n'.join([i['label'] for i in items])
 rofi = subprocess.run(
-    ['rofi', '-dmenu', '-prompt', 'Confluence/JIRA', '-format', 'i'],
+    ['rofi', '-dmenu', '-prompt', 'Confluence/JIRA', '-format', 'i', '-i'],
     input=rofi_input,
     stdout=subprocess.PIPE,
     universal_newlines=True)
