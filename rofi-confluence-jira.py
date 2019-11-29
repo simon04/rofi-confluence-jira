@@ -1,6 +1,7 @@
 #!/bin/env python3
 from xdg import BaseDirectory
 import configparser
+import functools
 import multiprocessing
 import requests
 import subprocess
@@ -81,9 +82,14 @@ if __name__ == '__main__':
     jira = Jira(config['jira']['URL'],
                 (config['jira']['USER'], config['jira']['PASS']))
     with multiprocessing.Pool(2) as pool:
-        pages = pool.apply_async(confluence.fetch)
-        issues = pool.apply_async(jira.fetch)
-        items = pages.get() + issues.get()
+        apply_async = pool.apply_async
+        results = [
+            apply_async(confluence.fetch, kwds=dict(limit=500, start=0)),
+            apply_async(confluence.fetch, kwds=dict(limit=500, start=500)),
+            apply_async(jira.fetch, kwds=dict(limit=500, start=0)),
+            apply_async(jira.fetch, kwds=dict(limit=500, start=500)),
+        ]
+        items = functools.reduce(lambda lst, x: lst + x.get(), results, [])
 
     index = Rofi.show_menu([i['label'] for i in items], 'Confluence/JIRA')
     if index is not None:
