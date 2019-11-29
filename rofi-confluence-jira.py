@@ -1,8 +1,8 @@
 #!/bin/env python3
-from rofi import Rofi
 from xdg import BaseDirectory
 import configparser
 import requests
+import subprocess
 import webbrowser
 
 config = configparser.ConfigParser()
@@ -50,7 +50,13 @@ for issue in issues:
 
 items = pages + issues
 
-r = Rofi()
-index, key = r.select('Confluence/JIRA', [i['label'] for i in items])
-if key >= 0:
+rofi_input = '\n'.join([i['label'] for i in items])
+rofi = subprocess.run(
+    ['rofi', '-dmenu', '-prompt', 'Confluence/JIRA', '-format', 'i'],
+    input=rofi_input,
+    stdout=subprocess.PIPE,
+    universal_newlines=True)
+rofi_key = rofi.returncode
+if rofi_key >= 0:
+    index = int(rofi.stdout)
     webbrowser.open_new_tab(items[index]['url'])

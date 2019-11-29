@@ -7,7 +7,6 @@ Loads the most recently modified [Confluence](https://www.atlassian.com/software
 - [Python 3](https://www.python.org/)
 - [PyXDG](https://freedesktop.org/wiki/Software/pyxdg/)
 - [rofi](https://github.com/davatorium/rofi)
-- [python-rofi](https://github.com/bcbnz/python-rofi)
 
 ## Configuration
 
