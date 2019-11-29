@@ -1,6 +1,7 @@
 #!/bin/env python3
 from xdg import BaseDirectory
 import configparser
+import multiprocessing
 import requests
 import subprocess
 import webbrowser
@@ -75,11 +76,15 @@ class Rofi:
 if __name__ == '__main__':
     config = configparser.ConfigParser()
     config.read(BaseDirectory.load_config_paths('rofi-confluence-jira.cfg'))
-    pages = Confluence(config['confluence']['URL'],
-                       (config['confluence']['USER'], config['confluence']['PASS'])).fetch()
-    issues = Jira(config['jira']['URL'],
-                        (config['jira']['USER'], config['jira']['PASS'])).fetch()
-    items = pages + issues
+    confluence = Confluence(config['confluence']['URL'],
+                            (config['confluence']['USER'], config['confluence']['PASS']))
+    jira = Jira(config['jira']['URL'],
+                (config['jira']['USER'], config['jira']['PASS']))
+    with multiprocessing.Pool(2) as pool:
+        pages = pool.apply_async(confluence.fetch)
+        issues = pool.apply_async(jira.fetch)
+        items = pages.get() + issues.get()
+
     index = Rofi.show_menu([i['label'] for i in items], 'Confluence/JIRA')
     if index is not None:
         webbrowser.open_new_tab(items[index]['url'])
