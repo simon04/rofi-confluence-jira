@@ -9,6 +9,14 @@ Loads the most recently modified [Confluence](https://www.atlassian.com/software
 - [Requests](https://pypi.org/project/requests/)
 - [rofi](https://github.com/davatorium/rofi)
 
+## Installation
+
+Depending on your system you can run, potentially you'd prefer this in a venv - but this would require you to add a wrapper for launching the script.
+
+- For stable requirements: `pip install -r requirements-freeze.txt`
+- For newer requirements: `pip install -r requirements.txt`
+
+
 ## Configuration
 
 This script reads the configuration from `"${XDG_CONFIG_HOME:-${HOME}/.config}/rofi-confluence-jira.cfg"`.
