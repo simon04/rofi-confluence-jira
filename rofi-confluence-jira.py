@@ -27,7 +27,7 @@ class Confluence:
         for page in pages:
             space = page['_expandable']['space'].split('/')[-1]
             title = page['title']
-            url = page['_links']['webui']
+            url = page['_links']['webui'].strip("/")
             page['url'] = f'{self.url}/{url}'
             page['label'] = f'[{space}] {title}'
         return pages
