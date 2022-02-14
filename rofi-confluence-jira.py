@@ -10,7 +10,7 @@ import webbrowser
 
 class Confluence:
     def __init__(self, url, auth):
-        self.url = url
+        self.url = url.rstrip('/')
         self.auth = auth
 
     def fetch(self, limit=500, start=0):
@@ -35,7 +35,7 @@ class Confluence:
 
 class Jira:
     def __init__(self, url, auth):
-        self.url = url
+        self.url = url.rstrip('/')
         self.auth = auth
 
     def fetch(self, limit=1000, start=0):
