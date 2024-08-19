@@ -14,6 +14,7 @@ class Confluence:
         self.auth = auth
 
     def fetch(self, limit=500, start=0):
+        # https://developer.atlassian.com/server/confluence/rest/v900/api-group-search/#api-group-search
         confluence = requests.get(
             f"{self.url}/rest/api/content/search",
             params={
@@ -40,6 +41,7 @@ class Jira:
         self.auth = auth
 
     def fetch(self, limit=1000, start=0):
+        # https://developer.atlassian.com/server/jira/platform/rest/v10000/api-group-search/#api-group-search
         jira = requests.get(
             f"{self.url}/rest/api/2/search",
             params={
