@@ -47,11 +47,11 @@ class Jira:
         self.auth = auth
 
     def fetch(self, limit=1000, start=0):
-        # https://developer.atlassian.com/server/jira/platform/rest/v10000/api-group-search/#api-group-search
+        # https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issue-search/#api-rest-api-3-search-jql-get
         jira = requests.get(
-            f"{self.url}/rest/api/2/search",
+            f"{self.url}/rest/api/3/search/jql",
             params={
-                "jql": "ORDER BY updated",
+                "jql": "summary IS NOT EMPTY ORDER BY updated",
                 "fields": "summary",
                 "maxResults": limit,
                 "startAt": start,
@@ -59,6 +59,8 @@ class Jira:
             headers={"Content-Type": "application/json"},
             auth=self.auth,
         )
+        if error := jira.json().get("errorMessages", None):
+            raise RuntimeError(str(error))
         issues = jira.json()["issues"]
         for issue in issues:
             key = issue["key"]
